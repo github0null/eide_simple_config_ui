@@ -13,33 +13,45 @@
         <div class="container">
             <div v-for="(item, _k) in data.items" :key=_k :style="style.items_margin">
                 <div v-if="item.type == 'input'">
-                    <vscode-text-field v-if="item.typeDetail['singleLine']" 
+                    <vscode-text-field v-if="item.attrs['singleLine']" 
                         :current-value="item.data.value" 
                         @input="item.data.value = $event.target.value"
-                        :size="item.typeDetail['size'] || style.input_size"
+                        :size="item.attrs['size'] || style.input_size"
+                        :readonly="item.attrs['readonly']"
+                        :disabled="item.attrs['disabled']"
                         :placeholder="item.data.placeHolder||''">{{item.name}}</vscode-text-field>
                     <vscode-text-area v-else 
                         :current-value="item.data.value" 
                         @input="item.data.value = $event.target.value"
-                        :cols="item.typeDetail['size'] || style.input_size"
-                        :rows="item.typeDetail['rows'] || 3"
-                        :resize="item.typeDetail['resize'] || 'vertical'"
+                        :cols="item.attrs['size'] || style.input_size"
+                        :rows="item.attrs['rows'] || 3"
+                        :resize="item.attrs['resize'] || 'vertical'"
+                        :readonly="item.attrs['readonly']"
+                        :disabled="item.attrs['disabled']"
                         :placeholder="item.data.placeHolder||''">{{item.name}}</vscode-text-area>
                 </div>
                 <div v-else-if="item.type == 'options'">
                     <div style="margin-bottom:4px;">{{item.name}}</div>
                     <vscode-dropdown
                         :current-value="item.data.enumDescriptions[item.data.value]"
-                        @change="item.data.value=item.data.enumDescriptions.indexOf($event.target.value)">
+                        @change="item.data.value=item.data.enumDescriptions.indexOf($event.target.value)"
+                        :disabled="item.attrs['disabled']">
                         <vscode-option v-for="(i_opt, idx) in item.data.enum" :key="idx"
                             >{{item.data.enumDescriptions[idx] || ''}}</vscode-option>
                     </vscode-dropdown>
                 </div>
                 <div v-else-if="item.type == 'text'">
-                    <pre :style="item.typeDetail['style'] || ''">{{item.data.value}}</pre>
+                    <pre :style="item.attrs['style'] || ''">{{item.data.value}}</pre>
                 </div>
                 <div v-else-if="item.type == 'table'">
                     <vscode-data-grid :id="'table.' + _k"></vscode-data-grid>
+                </div>
+                <div v-else-if="item.type == 'bool'">
+                    <vscode-checkbox
+                        :current-checked="item.data.value"
+                        @change="item.data.value = $event.target.checked"
+                        :readonly="item.attrs['readonly']"
+                        :disabled="item.attrs['disabled']">{{item.name}}</vscode-checkbox>
                 </div>
             </div>
         </div>
@@ -221,7 +233,7 @@ vscode-text-field {
 }
 
 vscode-checkbox {
-    width: 80px;
+    align-items: stretch;
 }
 
 .container {
