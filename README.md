@@ -1,8 +1,6 @@
-# eide-mem-layout-view
+# eide-simple-config-ui
 
-`Memory Layout WebView` for vscode plug-in [eide](https://marketplace.visualstudio.com/items?itemName=CL.eide) 
-
-![](./img/show.png)
+A internal component for vscode plug-in [eide](https://marketplace.visualstudio.com/items?itemName=CL.eide) 
 
 ## Project setup
 ```
