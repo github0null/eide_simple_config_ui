@@ -41,7 +41,12 @@
                     </vscode-dropdown>
                 </div>
                 <div v-else-if="item.type == 'text'">
-                    <pre :style="item.attrs['style'] || ''">{{item.data.value}}</pre>
+                    <div v-if="item.data.subType == 'code'">
+                        <pre :style="item.attrs['style'] || ''">{{item.data.value}}</pre>
+                    </div>
+                    <div v-else>
+                        <div :style="item.attrs['style'] || ''">{{item.data.value}}</div>
+                    </div>
                 </div>
                 <div v-else-if="item.type == 'table'">
                     <vscode-data-grid :id="'table.' + _k"></vscode-data-grid>
