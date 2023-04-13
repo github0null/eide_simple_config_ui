@@ -4,8 +4,8 @@
             <div id="header-cont">
                 <h2>{{data.title}}</h2>
                 <div id="button-cont">
-                    <vscode-button @click="onSave" :disabled="data.readonly">Save</vscode-button>
-                    <vscode-button @click="onReset" :disabled="data.readonly">Reset</vscode-button>
+                    <vscode-button @click="onSave" :disabled="data.readonly || data.btns['submit'].disabled">{{data.btns['submit'].title}}</vscode-button>
+                    <vscode-button @click="onReset" :disabled="data.readonly || data.btns['reset'].disabled">{{data.btns['reset'].title}}</vscode-button>
                 </div>
             </div>
         </div>
@@ -53,6 +53,12 @@
                         :readonly="item.attrs['readonly']"
                         :disabled="item.attrs['disabled']">{{item.name}}</vscode-checkbox>
                 </div>
+                <div v-else-if="item.type == 'divider'">
+                    <vscode-divider :role="item.attrs['role']"></vscode-divider>
+                </div>
+                <div v-else-if="item.type == 'tag'">
+                    <vscode-tag>{{item.data.value}}</vscode-tag>
+                </div>
             </div>
         </div>
     </div>
@@ -76,6 +82,16 @@ let appData = {
     data: {
         title: '',
         readonly: false,
+        btns: {
+            'submit': {
+                title: 'Save',
+                disabled: false
+            },
+            'reset': {
+                title: 'Reset',
+                disabled: false
+            }
+        },
         items: {}
     }
 };

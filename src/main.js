@@ -84,6 +84,12 @@ function initAppData() {
     vueData.data.title    = initData.title;
     vueData.data.readonly = initData.readonly;
 
+    if (initData.btns) {
+        for (const key in initData.btns) {
+            vueData.data.btns[key] = JSON.parse(JSON.stringify(initData.btns[key]));
+        }
+    }
+
     for (const key in initData.items) {
         vueData.data.items[key] = JSON.parse(JSON.stringify(initData.items[key]));
     }
