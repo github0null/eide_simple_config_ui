@@ -4,8 +4,14 @@
             <div id="header-cont">
                 <h2>{{data.title}}</h2>
                 <div id="button-cont">
-                    <vscode-button @click="onSave" :disabled="data.readonly || data.btns['submit'].disabled">{{data.btns['submit'].title}}</vscode-button>
-                    <vscode-button @click="onReset" :disabled="data.readonly || data.btns['reset'].disabled">{{data.btns['reset'].title}}</vscode-button>
+                    <vscode-button 
+                        v-if="!data.btns['submit'].hidden" 
+                        @click="onSave" 
+                        :disabled="data.readonly || data.btns['submit'].disabled">{{data.btns['submit'].title}}</vscode-button>
+                    <vscode-button 
+                        v-if="!data.btns['reset'].hidden" 
+                        @click="onReset" 
+                        :disabled="data.readonly || data.btns['reset'].disabled">{{data.btns['reset'].title}}</vscode-button>
                 </div>
             </div>
         </div>
@@ -63,6 +69,12 @@
                 </div>
                 <div v-else-if="item.type == 'tag'">
                     <vscode-tag>{{item.data.value}}</vscode-tag>
+                </div>
+                <div v-else-if="item.type == 'button'">
+                    <vscode-button
+                        @click="emitMessageToVscode(item.data.clickEvent)" 
+                        :disabled="item.attrs['disabled']"
+                        :appearance="item.attrs['appearance']">{{item.name}}</vscode-button>
                 </div>
             </div>
         </div>
@@ -159,6 +171,9 @@ export default {
             _instance.$emit('reset');
         },
 
+        emitMessageToVscode: function (msg) {
+            _instance.$emit('emitMsg', msg);
+        },
     },
 };
 </script>

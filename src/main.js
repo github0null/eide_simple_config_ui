@@ -76,6 +76,7 @@ function initApp() {
     appInstance = App.methods.getInstance()
     appInstance.$on('save', () => save())
     appInstance.$on('reset', () => reset())
+    appInstance.$on('emitMsg', (msg) => vscode.postMessage(msg))
     console.log(TAG + 'app inited done !')
 }
 
