@@ -83,6 +83,8 @@
 
 <script>
 
+import autosize from 'autosize';
+
 let _instance;
 
 /* init data */
@@ -127,7 +129,28 @@ export default {
     // mount object
     mounted() {
         _instance = this;
-        this.updateAllDataGrid();
+        this.doUpdateData();
+        // 自动初始化 text-area 高度
+        const eles = document.querySelectorAll('vscode-text-area');
+        if (eles) {
+            eles.forEach(element => {
+                const textarea = element.control;
+                if (textarea) {
+                    const _resize = textarea.style.resize;
+                    const _textAlign = textarea.style.textAlign;
+                    const _wordWrap = textarea.style.wordWrap;
+                    textarea.addEventListener('autosize:resized', function () {
+                        setTimeout(() => {
+                            console.log('restore textarea style');
+                            textarea.style.resize = _resize;
+                            textarea.style.textAlign = _textAlign;
+                            textarea.style.wordWrap = _wordWrap;
+                        }, 200);
+                    });
+                    autosize(textarea);
+                }
+            });
+        }
     },
 
     watch: {
@@ -149,16 +172,27 @@ export default {
                 }
             }
 
-            this.updateAllDataGrid();
+            this.doUpdateData();
         },
 
-        updateAllDataGrid: function() {
+        doUpdateData: function() {
 
             for (const key in this.data.items) {
                 if (this.data.items[key].type == 'table') {
                     document.getElementById(`table.${key}`)
                         .rowsData = JSON.parse(JSON.stringify(this.data.items[key].data.value));
                 }
+            }
+
+            // 更新 textarea 高度
+            const eles = document.querySelectorAll('vscode-text-area');
+            if (eles) {
+                eles.forEach(element => {
+                    const textarea = element.control;
+                    if (textarea) {
+                        autosize.update(textarea);
+                    }
+                });
             }
         },
 
