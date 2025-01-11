@@ -83,7 +83,7 @@
 
 <script>
 
-import autosize from 'autosize';
+import autosize from './autosize';
 
 let _instance;
 
@@ -129,28 +129,22 @@ export default {
     // mount object
     mounted() {
         _instance = this;
-        this.doUpdateData();
-        // 自动初始化 text-area 高度
+
+        // 初始化autosize
         const eles = document.querySelectorAll('vscode-text-area');
         if (eles) {
             eles.forEach(element => {
-                const textarea = element.control;
-                if (textarea) {
-                    const _resize = textarea.style.resize;
-                    const _textAlign = textarea.style.textAlign;
-                    const _wordWrap = textarea.style.wordWrap;
-                    textarea.addEventListener('autosize:resized', function () {
-                        setTimeout(() => {
-                            console.log('restore textarea style');
-                            textarea.style.resize = _resize;
-                            textarea.style.textAlign = _textAlign;
-                            textarea.style.wordWrap = _wordWrap;
-                        }, 200);
-                    });
-                    autosize(textarea);
+                const ta = element.control;
+                if (ta) {
+                    const old_disp = ta.style.display;
+                    ta.style.display = 'none';
+                    autosize(ta);
+                    ta.style.display = old_disp;
                 }
             });
         }
+
+        this.doUpdateData();
     },
 
     watch: {
@@ -184,16 +178,18 @@ export default {
                 }
             }
 
-            // 更新 textarea 高度
-            const eles = document.querySelectorAll('vscode-text-area');
-            if (eles) {
-                eles.forEach(element => {
-                    const textarea = element.control;
-                    if (textarea) {
-                        autosize.update(textarea);
-                    }
-                });
-            }
+            // 延迟更新 textarea 高度
+            setTimeout(() => {
+                const eles = document.querySelectorAll('vscode-text-area');
+                if (eles) {
+                    eles.forEach(element => {
+                        const ta = element.control;
+                        if (ta) {
+                            autosize.update(ta);
+                        }
+                    });
+                }
+            }, 200);
         },
 
         // method
