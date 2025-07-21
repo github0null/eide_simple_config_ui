@@ -41,7 +41,7 @@
                     <vscode-dropdown
                         :current-value="item.data.enumDescriptions[item.data.value]"
                         @change="item.data.value=item.data.enumDescriptions.indexOf($event.target.value)"
-                        :disabled="item.attrs['disabled']">
+                        :disabled="item.attrs['disabled']" :style="item.attrs['style'] || ''">
                         <vscode-option v-for="(i_opt, idx) in item.data.enum" :key="idx"
                             >{{item.data.enumDescriptions[idx] || ''}}</vscode-option>
                     </vscode-dropdown>
